@@ -2,15 +2,14 @@
 
 ----
 ## pourquoi?
-pour tester sur un exemple publique la mise en place d'une application R shiny.
+pour tester, sur un jeu de données publiques, la mise en place d'une application R shiny.
 
 > à la suite de la formation R shiny de ThinkR.
 
 ----
 ## comment cette application s'utilise?
 
-1. Lancer l'application ericvenot.shinyapps.io (
-[links](https://ericvenot.shinyapps.io) ),
+1. Lancer l'application https://ericvenot.shinyapps.io ,
 
 2. Charger le fichier Source,
 
@@ -18,13 +17,13 @@ pour tester sur un exemple publique la mise en place d'une application R shiny.
 ----
 
 ## Ce projet est aussi sur github
+=> https://ericvenot.github.io
 https://ericvenot.github.io
-[links](https://ericvenot.github.io)
 
 ----
 
 ** Mise à jour le 6 avril 2020 **
 
 ----
-* texte markdown généré simplement avec https://markdownlivepreview.com/
-[links](https://markdownlivepreview.com/)
+> Remarque: texte markdown généré simplement avec https://markdownlivepreview.com/
+
