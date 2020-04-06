@@ -18,7 +18,6 @@ pour tester, sur un jeu de données publiques, la mise en place d'une applicatio
 
 ## Ce projet est aussi sur github
 => https://ericvenot.github.io
-https://ericvenot.github.io
 
 ----
 
