@@ -1,6 +1,6 @@
 Package: suivicovid
 Title: Suivi de la progression mondiale du COVID19
-Version: 0.3
+Version: 0.4
 Authors@R: person('Eric', 'VENOT', email = 'eric.venot@inrae.fr', role = c('cre', 'aut'))
 Description: Ce package permet de suivre la progression du COVID 19 dans le monde a partir des donnees fournies par l Europe.
 License: MIT + file LICENSE
@@ -10,13 +10,15 @@ Imports:
     shiny,
     dplyr,
     httr,
-    xlsx,
     ggplot2,
     scales,
     rworldmap,
     pkgload,
     leaflet,
-    rgdal
+    rgdal,
+    plotly,
+    readxl,
+    lubridate
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.0

@@ -18,12 +18,14 @@
 usethis::use_package( "thinkr" )
 usethis::use_package("dplyr")
 usethis::use_package("httr")
-usethis::use_package("xlsx")
+usethis::use_package("readxl")
 usethis::use_package("ggplot2")
 usethis::use_package("scales")
 usethis::use_package("rworldmap")
 usethis::use_package("leaflet")
 usethis::use_package("rgdal")
+usethis::use_package("plotly")
+usethis::use_package("lubridate")
 
 ## Add modules ----
 ## Create a module infrastructure in R/

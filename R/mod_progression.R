@@ -7,6 +7,7 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
+#' @importFrom lubridate date
 mod_progression_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -26,6 +27,7 @@ mod_progression_server <- function(input, output, session,r){
       req(r$covid)
       r$covid %>% 
         filter(pays %in% r$ordre) %>% 
+        mutate(date=date(x = date)) %>% 
         ggplot()+
         aes(x=date,y=deaths,group=pays)+
         theme_minimal()+

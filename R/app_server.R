@@ -5,11 +5,12 @@
 #' @import shiny
 #' @importFrom dplyr %>% filter group_by mutate select rename ungroup summarise arrange desc pull case_when
 #' @importFrom httr GET write_disk authenticate
-#' @importFrom xlsx read.xlsx
+#' @importFrom readxl read_excel
 #' @importFrom ggplot2 ggplot aes geom_bar geom_line geom_text theme_minimal scale_x_discrete scale_x_date labs theme element_text
 #' @importFrom scales breaks_width
 #' @importFrom utils head
 #' @importFrom rworldmap joinCountryData2Map mapCountryData
+#' @importFrom lubridate date
 #' 
 #' @noRd
 app_server <- function( input, output, session ) {
@@ -25,16 +26,27 @@ app_server <- function( input, output, session ) {
     
     #download the dataset from the website to a local temporary file
     GET(chemin_url, authenticate(":", ":", type="ntlm"), write_disk(tf <- tempfile(fileext = ".xlsx")))
-    covid1 <- read.xlsx(tf,sheetIndex = 1)
+    covid1 <- read_excel(tf,sheet = 1)
     
+    # renommage des quelques variables
     global$covid <- covid1 %>% 
       rename(codepays=countryterritoryCode,pays=countriesAndTerritories, date=dateRep) %>%
       select(codepays,pays,date,deaths)
     
+    # calcul du nombre de deces total par jour
     global$total_par_jour<-global$covid %>%
       group_by(date) %>% 
-      mutate(total=sum(deaths)) %>% 
-      ungroup()
+      mutate(pays="tous_les_pays",deaths=sum(deaths)) %>% 
+      ungroup() %>% 
+      select(pays,date,deaths) %>% 
+      unique()
+    
+    # ajout dans le fichier initial covid
+    global$total_par_jour<-global$covid %>% 
+      select(pays,date,deaths) %>% 
+      rbind(global$total_par_jour) %>% 
+      mutate(date=date(x = date)) %>% 
+      arrange(pays,date)
     
     # calcul du nombre total de deces
     global$deces<-global$covid %>% 
@@ -57,7 +69,10 @@ app_server <- function( input, output, session ) {
       filter(total_deces>=100) %>% 
       arrange(desc(total_deces)) 
     
+    # recuperation de la liste de tous les pays avec plus de 100 deces + tous_les_pays 
     global$ordre<- global$top100 %>% pull(pays)
+    global$ordre_avec_tous<-c("tous_les_pays",global$ordre)
+    
   })
   
 
