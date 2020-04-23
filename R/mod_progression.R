@@ -11,7 +11,10 @@
 mod_progression_ui <- function(id){
   ns <- NS(id)
   tagList(
-    fluidRow(plotOutput(ns("progression"))
+    fluidRow(
+      h2("Progression du nombre de décès journaliers pour les pays avec plus de 100 décès"),
+      plotOutput(ns("progression"),height = 800),
+      h2("(Rem: package ggplot)")
     )
   )
 }
@@ -29,7 +32,7 @@ mod_progression_server <- function(input, output, session,r){
         filter(pays %in% r$ordre) %>% 
         mutate(date=date(x = date)) %>% 
         ggplot()+
-        aes(x=date,y=deaths,group=pays)+
+        aes(x=date,y=morts,group=pays)+
         theme_minimal()+
         geom_line(aes(color=pays),size=1)+
         labs(title=(paste0("Nombre de morts par jour (mise a jour du ",r$hier,")")),

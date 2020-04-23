@@ -8,13 +8,13 @@
 #'
 #' @importFrom shiny NS tagList 
 #' @importFrom RColorBrewer brewer.pal
-#' @importFrom bubbles bubblesOutput renderBubbles
+#' @importFrom bubbles bubbles bubblesOutput renderBubbles
 mod_bulles_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h2("ERRRRRRRRRICCCCC"),
+    h2("Présentation des pays avec plus de 1000 décès"),
     bubblesOutput(ns("bulles")),
-    h2("VANUATU")
+    h2("(Rem: bubble package)")
   )
 }
     
@@ -29,7 +29,7 @@ mod_bulles_server <- function(input, output, session,r){
     top1000 <- r$deces %>% 
       filter(total_deces>1000)
     n<-nrow(top1000)
-    palette <- colorRampPalette(brewer.pal(12,"Paired2"))(n)
+    palette <- colorRampPalette(brewer.pal(12,"Paired"))(n)
     bubbles(top1000$total_deces, top1000$pays, key = top1000$pays,color = palette )
   })
 }

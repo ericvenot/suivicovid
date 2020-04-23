@@ -11,6 +11,9 @@
 #' @importFrom utils head
 #' @importFrom rworldmap joinCountryData2Map mapCountryData
 #' @importFrom lubridate date
+#' @importFrom knitr kable
+#' @importFrom kableExtra kable_styling
+#' @importFrom shinyjs show
 #' 
 #' @noRd
 app_server <- function( input, output, session ) {
@@ -30,20 +33,24 @@ app_server <- function( input, output, session ) {
     
     # renommage des quelques variables
     global$covid <- covid1 %>% 
-      rename(codepays=countryterritoryCode,pays=countriesAndTerritories, date=dateRep) %>%
-      select(codepays,pays,date,deaths)
+      rename(continent=continentExp,
+             codepays=countryterritoryCode,
+             pays=countriesAndTerritories, 
+             date=dateRep,
+             morts=deaths) %>%
+      select(continent,codepays,pays,date,morts)
     
     # calcul du nombre de deces total par jour
     global$total_par_jour<-global$covid %>%
       group_by(date) %>% 
-      mutate(pays="tous_les_pays",deaths=sum(deaths)) %>% 
+      mutate(pays="tous_les_pays",morts=sum(morts)) %>% 
       ungroup() %>% 
-      select(pays,date,deaths) %>% 
+      select(pays,date,morts) %>% 
       unique()
     
     # ajout dans le fichier initial covid
     global$total_par_jour<-global$covid %>% 
-      select(pays,date,deaths) %>% 
+      select(pays,date,morts) %>% 
       rbind(global$total_par_jour) %>% 
       mutate(date=date(x = date)) %>% 
       arrange(pays,date)
@@ -52,7 +59,7 @@ app_server <- function( input, output, session ) {
     global$deces<-global$covid %>% 
       filter(!is.na(codepays)) %>%       
       group_by(codepays,pays) %>% 
-      summarise(total_deces=sum(deaths)) %>% 
+      summarise(total_deces=sum(morts)) %>% 
       arrange(desc(total_deces)) %>% 
       ungroup() %>% 
       mutate(covid19=case_when(
@@ -67,18 +74,42 @@ app_server <- function( input, output, session ) {
     # selection des pays avec plus de 100 deces
     global$top100<-global$deces %>% 
       filter(total_deces>=100) %>% 
-      arrange(desc(total_deces)) 
+      arrange(desc(total_deces))
     
     # recuperation de la liste de tous les pays avec plus de 100 deces + tous_les_pays 
     global$ordre<- global$top100 %>% pull(pays)
     global$ordre_avec_tous<-c("tous_les_pays",global$ordre)
     
+    # pour cacher l apercu tant que les donnees ne sont pas chargees
+    shinyjs::show(id="box_apercu")
+    
   })
   
-
+  output$apercu <- function(){
+    req(global$covid)
+    global$covid %>% 
+      arrange(desc(date),pays) %>% 
+      head(500) %>% 
+      arrange(date,desc(pays)) %>% 
+      head(10) %>% 
+      arrange(date,pays) %>% 
+      knitr::kable("html") %>% 
+      kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F)
+  }
+  
   output$deces <- renderTable({
+    req(global$top100)
     global$top100
   })
+  
+  # preparation de la capture d ecran du site europeen
+  output$site_europeen <- renderImage({
+    list(src="inst/app/www/site_europeen_covid19.png",
+         height=350,
+         contentType = 'image/png',
+         alt="Capture d'écran du site européen")
+  },deleteFile = FALSE)
+  
   callModule(mod_apercu_server, "apercu_ui_1",r=global)  
   
   callModule(mod_histogramme_server, "histogramme_ui_1",r=global)
@@ -88,5 +119,7 @@ app_server <- function( input, output, session ) {
   callModule(mod_progressionavectout_server, "progressionavectout_ui_1",r=global)
   
   callModule(mod_carte_server, "carte_ui_1",r=global)
+  
+  callModule(mod_bulles_server, "bulles_ui_1",r=global)
 
 }

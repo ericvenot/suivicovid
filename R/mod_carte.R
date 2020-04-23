@@ -13,7 +13,10 @@
 mod_carte_ui <- function(id){
   ns <- NS(id)
   tagList(
-    leafletOutput(ns("carte"))
+    h2("Carte mondiale des pays touchés par le coronavirus."),
+    br(),
+    leafletOutput(ns("carte"),height=800),
+    h2("(Rem: package leaflet avec OpenStreetMap (possible de zoomer))")
   )
 }
     
