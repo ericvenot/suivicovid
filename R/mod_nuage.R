@@ -12,7 +12,7 @@
 mod_nuage_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h2("Présentation des pays avec plus de 1000 décès en WORDCLOUD"),
+    h2("Pr\u00E9sentation des pays avec plus de 1000 d\u00E9c\u00E8s en WORDCLOUD"),
     wordcloud2Output(ns("nuage")),
     h2("(Rem: package wordcloud2)") 
   )

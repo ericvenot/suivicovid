@@ -5,8 +5,8 @@ account: ericvenot
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2041603
-bundleId: 2982067
+bundleId: 3058691
 url: https://ericvenot.shinyapps.io/suivicovid/
-when: 1586281302.78278
+when: 1587717228.84744
 asMultiple: FALSE
 asStatic: FALSE

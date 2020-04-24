@@ -11,15 +11,15 @@
 mod_progressionavectout_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h2("Progression du nombre de décès journaliers pour les pays avec plus de 100 décès"),
+    h2("Progression du nombre de d\u00E9c\u00E8s journaliers pour les pays avec plus de 100 d\u00E9c\u00E8s"),
     br(),
     p(" Ce graphique est ",strong("interactif!")," Vous pouvez : ",
       tags$br(),
-      " - ", strong("retirer")," un (ou plusieurs) pays en cliquant sur ce pays dans la légende,",
+      " - ", strong("retirer")," un (ou plusieurs) pays en cliquant sur ce pays dans la l\u00E9gende,",
       tags$br(),
-      " - ", strong("ne sélectionner qu'un des pays")," en double cliquant sur ce pays dans la légende,",
+      " - ", strong("ne s\u00E9lectionner qu'un des pays")," en double cliquant sur ce pays dans la l\u00E9gende,",
       tags$br(),
-      " - ", strong("sélectionner une partie des dates")," en faisant glisser les barres verticales de l apercu en cas.",
+      " - ", strong("s\u00E9lectionner une partie des dates")," en faisant glisser les barres verticales de l apercu en cas.",
       .noWS = c("after-begin", "before-end"), style = "font-size:14px"),
     br(),
     plotlyOutput(ns("progressionavectout"),height=700),

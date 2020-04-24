@@ -12,7 +12,7 @@ mod_progression_ui <- function(id){
   ns <- NS(id)
   tagList(
     fluidRow(
-      h2("Progression du nombre de décès journaliers pour les pays avec plus de 100 décès"),
+      h2("Progression du nombre de d\u00E9c\u00E8s journaliers pour les pays avec plus de 100 d\u00E9c\u00E8s"),
       plotOutput(ns("progression"),height = 800),
       h2("(Rem: package ggplot)")
     )

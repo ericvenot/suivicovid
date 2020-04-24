@@ -28,10 +28,12 @@ usethis::use_package("plotly")
 usethis::use_package("lubridate")
 usethis::use_package("shinydashboard")
 usethis::use_package("RColorBrewer")
-usethis::use_package("bubbles") # devtools::install_github("jcheng5/bubbles")
 usethis::use_package("knitr")
 usethis::use_package("kableExtra")
 usethis::use_package("shinyjs") #install.packages("shinyjs")
+usethis::use_package("wordcloud2")
+usethis::use_package("htmltools")
+usethis::use_dev_package("bubbles") # devtools::install_github("jcheng5/bubbles")
 
 ## Add modules ----
 ## Create a module infrastructure in R/
@@ -41,7 +43,7 @@ golem::add_module( name = "progression")
 golem::add_module( name = "progressionavectout")
 golem::add_module( name = "carte")
 golem::add_module( name = "bulles")
-golem::add_module( name = "name_of_module2" ) # Name of the module
+golem::add_module( name = "nuage" )
 
 ## Add helper functions ----
 ## Creates ftc_* and utils_*

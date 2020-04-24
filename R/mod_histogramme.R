@@ -11,7 +11,7 @@
 mod_histogramme_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h2("Nombre de décès par pays (pays avec plus de 100 décès)"),
+    h2("Nombre de d\u00E9c\u00E8s par pays (pays avec plus de 100 d\u00E9c\u00E8s)"),
     plotOutput(ns("histogramme"),height = 800),
     h2("(Rem: ggplot package)")    
     

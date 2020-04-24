@@ -9,12 +9,13 @@
 #' @importFrom shiny NS tagList 
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom bubbles bubbles bubblesOutput renderBubbles
+
 mod_bulles_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h2("Présentation des pays avec plus de 1000 décès"),
+    h2("Pr\u00E9sentation des pays avec plus de 1000 d\u00E9c\u00E8s"),
     bubblesOutput(ns("bulles")),
-    h2("(Rem: bubble package)")
+    h2("(Rem: package bubble)")
   )
 }
     

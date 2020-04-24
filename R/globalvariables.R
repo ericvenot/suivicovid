@@ -11,4 +11,5 @@ globalVariables(c("codepays",
                   "freq",
                   "morts",
                   "pays",
-                  "total_deces"))
+                  "total_deces",
+                  "pays2"))
