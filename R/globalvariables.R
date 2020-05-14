@@ -12,4 +12,6 @@ globalVariables(c("codepays",
                   "morts",
                   "pays",
                   "total_deces",
-                  "pays2"))
+                  "pays2",
+                  "cumul",
+                  "taux"))

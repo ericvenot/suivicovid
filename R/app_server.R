@@ -3,10 +3,10 @@
 #' @param input,output,session Internal parameters for {shiny}. 
 #'     DO NOT REMOVE.
 #' @import shiny
-#' @importFrom dplyr %>% filter group_by mutate select rename ungroup summarise arrange desc pull case_when between last
+#' @importFrom dplyr %>% filter group_by mutate select rename ungroup summarise arrange desc pull case_when between last slice
 #' @importFrom httr GET write_disk authenticate
 #' @importFrom readxl read_excel
-#' @importFrom ggplot2 ggplot aes geom_bar geom_line geom_text theme_minimal scale_x_discrete scale_x_date labs theme element_text
+#' @importFrom ggplot2 ggplot aes geom_bar geom_line geom_text theme_minimal scale_x_discrete scale_x_date labs theme element_text geom_smooth geom_point
 #' @importFrom scales breaks_width
 #' @importFrom utils head
 #' @importFrom rworldmap joinCountryData2Map mapCountryData
@@ -15,6 +15,7 @@
 #' @importFrom kableExtra kable_styling
 #' @importFrom shinyjs show
 #' @importFrom shinydashboard renderValueBox
+#' @importFrom lubridate today days
 
 #' @noRd
 app_server <- function( input, output, session ) {
@@ -159,7 +160,7 @@ app_server <- function( input, output, session ) {
       width=6
     )
   }) 
-  # nombre de nouveaux cas
+  # nombre de pays avec plus de 100 deces
   output$box_nbpays100<-renderValueBox({
     req(global$covid)
     nbpays100<-global$covid %>% 
@@ -176,29 +177,82 @@ app_server <- function( input, output, session ) {
       width=6
     )
   })
-  # nombre de nouveaux cas
+  # pays avec le plus de deces hier
   output$box_pirepays<-renderValueBox({
     req(global$covid)
     pirepays<-global$covid %>% 
       filter(!is.na(codepays)) %>%       
+      filter(date==today()-days(1)) %>% 
       group_by(codepays,pays) %>% 
       summarise(total_deces=sum(morts)) %>% 
       ungroup() %>% 
       filter(total_deces==max(total_deces)) %>% 
-      mutate(pays2=paste0(pays,"(",total_deces,")")) %>% 
+      mutate(pays2=paste0(pays," (",total_deces,")")) %>% 
       pull(pays2)
     valueBox(
       value = tags$p(pirepays, style = "font-size: 80%;color: white; font-weight: bold;"),
-      subtitle = tags$p("Pays avec le plus de cas hier", style = "font-size: 220%;color: white; font-weight: bold"),
+      subtitle = tags$p("Pays avec le plus grand nombre de nouveaux cas hier", style = "font-size: 220%;color: white; font-weight: bold"),
       icon = icon("flag"),
       color="purple",
       width=6
     )
   })  
   
+  # 2 pays avec les pires taux de croissance
+  output$box_piretaux1<-renderValueBox({
+    req(global$covid)
+    piretaux1<-global$covid %>% 
+      filter(!is.na(codepays)) %>%     
+      arrange(pays,date) %>%
+      group_by(pays) %>% 
+      mutate(cumul=cumsum(morts)) %>% 
+      arrange(pays,date) %>% 
+      mutate(taux=round(morts/cumul*100,1)) %>%
+      filter(date==max(date)) %>% 
+      ungroup() %>% 
+      arrange(desc(taux)) %>% 
+      dplyr::slice(1) %>% 
+      mutate(pays2=paste0(pays," (",taux," %)")) %>% 
+      pull(pays2)
+    valueBox(
+      value = tags$p(piretaux1, style = "font-size: 80%;color: white; font-weight: bold;"),
+      subtitle = tags$p("Pays avec le pire taux de croissance hier", style = "font-size: 220%;color: white; font-weight: bold"),
+      icon = icon("exclamation"),
+      color="blue",
+      width=6
+    )
+  })  
+  
+  output$box_piretaux2<-renderValueBox({
+    req(global$covid)
+    piretaux1<-global$covid %>% 
+      filter(!is.na(codepays)) %>%     
+      arrange(pays,date) %>%
+      group_by(pays) %>% 
+      mutate(cumul=cumsum(morts)) %>% 
+      arrange(pays,date) %>% 
+      mutate(taux=round(morts/cumul*100,1)) %>% 
+      filter(date==max(date)) %>% 
+      ungroup() %>% 
+      arrange(desc(taux)) %>% 
+      dplyr::slice(2) %>% 
+      mutate(pays2=paste0(pays," (",taux," %)")) %>% 
+      pull(pays2)
+    valueBox(
+      value = tags$p(piretaux1, style = "font-size: 80%;color: white; font-weight: bold;"),
+      subtitle = tags$p("Pays avec le 2i\u00E8me pire taux de croissance hier", style = "font-size: 220%;color: white; font-weight: bold"),
+      icon = icon("bell"),
+      color="yellow",
+      width=6
+    )
+  })  
+  
+  
   # lancement des differents modules
   
-  callModule(mod_apercu_server, "apercu_ui_1",r=global)  
+  callModule(mod_apercu_server, "apercu_ui_1",r=global)
+  
+  callModule(mod_croissance_server, "croissance_ui_1",r=global)
   
   callModule(mod_histogramme_server, "histogramme_ui_1",r=global)
   

@@ -27,6 +27,7 @@ app_ui <- function(request) {
                   max = as.Date(Sys.Date()-1,"%d/%m/%Y"),
                   value=c(as.Date("01/01/2020"),as.Date(Sys.Date()-1)),
                   timeFormat="%d/%m/%Y"),
+      menuItem("Taux de croissance", tabName = "croissance", icon = icon("bell")),
       menuItem("Les plus touch\u00E9s", tabName = "bulles", icon = icon("spinner")),
       menuItem("Nuage de pays", tabName = "nuage", icon = icon("cloud")),
       menuItem("Histogramme", tabName = "histo", icon = icon("chart-bar")),
@@ -58,11 +59,14 @@ app_ui <- function(request) {
                              ".",
                              tags$br(),
                              tags$br(),
+                             strong("Derni\u00E8re mise \u00E0 jour:")," ajout du suivi du taux de croissance.",                             
+                             tags$br(),
+                             tags$br(),
                              "Le code qui a permis de g\u00E9n\u00E9rer cette appli est disponible sur ",strong("github"),": ",
                              a(href = 'https://github.com/ericvenot/suivicovid', 'https://github.com/ericvenot/suivicovid', .noWS = "outside"),
                              tags$br(),
                              tags$br(),
-                             strong("Pour l'utiliser,")," il faut tout d'abord ",strong("charger les donn\u00E9es")," dans l'onglet Chargement des donn\u00E9s !",
+                             strong("Pour l'utiliser,")," il faut tout d'abord ",strong("charger les donn\u00E9es")," dans l'onglet ",strong("Chargement des donn\u00E9s !"),
                              .noWS = c("after-begin", "before-end"), style = "font-size:14px"),
                            br(),
                            tags$a(imageOutput("site_europeen"),href = 'https://www.ecdc.europa.eu', target="_blank"),
@@ -120,8 +124,26 @@ app_ui <- function(request) {
                        valueBoxOutput("box_mortstot"),
                        valueBoxOutput("box_pirepays")
                 )
+              ),
+              fluidRow(
+                column(12,
+                       valueBoxOutput("box_piretaux1"),
+                       valueBoxOutput("box_piretaux2")
+                       
+                )
               )
+              
       ),
+      tabItem(tabName="croissance",
+              fluidRow(
+                column(12,height=1000,
+                       box(width = NULL,height = 900,solidHeader=TRUE,
+                           mod_croissance_ui("croissance_ui_1")
+                       )
+                )
+              )
+      ),       
+      
       tabItem(tabName="bulles",
               fluidRow(
                 column(12,height=1000,

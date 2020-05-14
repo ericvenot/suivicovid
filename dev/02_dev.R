@@ -44,6 +44,7 @@ golem::add_module( name = "progressionavectout")
 golem::add_module( name = "carte")
 golem::add_module( name = "bulles")
 golem::add_module( name = "nuage" )
+golem::add_module( name = "croissance" )
 
 ## Add helper functions ----
 ## Creates ftc_* and utils_*
